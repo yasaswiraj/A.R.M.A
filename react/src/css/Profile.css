@@ -16,3 +16,14 @@
         color: white;
         margin-top: 50px;
     }
+li {
+    list-style-type : '';
+    content: "\2022";
+    font-family: FontAwesome;
+    margin-right: 10px;
+    
+    text-align: center;
+    font-size: 1.6em;
+    font-weight: normal;
+
+  }
