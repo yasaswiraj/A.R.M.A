@@ -27,3 +27,14 @@ li {
     font-weight: normal;
 
   }
+  .profile-pic {
+    height: 10vmin;
+    -webkit-margin-collapse: 10px;
+    border-radius: 50px;
+   
+  }
+  div.media img {
+    height: 10vmin;
+    margin-right: 10px;
+    border-radius: 50px;
+  }

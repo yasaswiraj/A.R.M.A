@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import '../css/Profile.css';
+import profilePic from '../images/profilePic.jpg';
+import { Media } from 'react-bootstrap';
+
 
 
 
@@ -26,7 +29,11 @@ class Profile extends Component {
           })
         return ( 
             <div >
-                <h1 className="header">Profile Page</h1>
+                <h1 className="header">My Profile</h1>
+                <a href="/">
+            <img src={profilePic} className="profile-pic" alt="John"/>
+            </a>
+            
              <ul> {items}</ul>
                   
 
