@@ -3,7 +3,6 @@ const express = require("express");
 const path = require("path");
 const body_parser = require("body-parser");
 const users = require("./node/users.js");
-const dash = require("./node/DashboardQueries.js");
 const dataValidator = require("./node/dataValidator.js");
 const serverHelper = require("./ServerHelper");
 const mailSender = require("./node/mail-sender.js");
@@ -176,15 +175,6 @@ app.get("/forumdashboard", async (req, res) => {
     .catch((error) => res.status(400).json({ err: error }));
 });
 
-// app.get("/forumdashboard", async (req, res) => {
-//   dash.getForumTable(req).then(
-//     console.log(successful)
-//   ).catch((err) => {
-//     console.log(err)
-//   })
-// });
-
-
 app.get("/getrequest", async (req, res) => {
   serverHelper
     .fetchRequest(req)
@@ -195,6 +185,7 @@ app.get("/getrequest", async (req, res) => {
 });
 
 //REGISTRATION STATUS CHECK
+
 
 app.post("/checkRegistrationStatus", (req, res) => {
   serverHelper
@@ -255,7 +246,6 @@ app.post("/teamattendance", urlencodedParser, function (req, res) {
   let end_meridian = req.body.end_meridian;
   let letter_body = req.body.letter_body;
   let studentdetails = req.body.studentdetails;
-
   let details = {
     designation: designation,
     department: department,
@@ -299,7 +289,6 @@ app.post("/participantsattendance", urlencodedParser, function (req, res) {
   let end_meridian = req.body.end_meridian;
   let letter_body = req.body.letter_body;
   let studentdetails = req.body.studentdetails;
-
   let details = {
     designation: designation,
     department: department,
@@ -341,7 +330,6 @@ app.post("/conductevent", urlencodedParser, function (req, res) {
   let end_min = req.body.end_min;
   let end_meridian = req.body.end_meridian;
   let letter_body = req.body.letter_body;
-
   let details = {
     subject: subject,
     date: date,
@@ -382,7 +370,6 @@ app.post("/eventvenue", urlencodedParser, function (req, res) {
   let end_min = req.body.end_min;
   let end_meridian = req.body.end_meridian;
   let letter_body = req.body.letter_body;
-
   let details = {
     subject: subject,
     date: date,
@@ -426,7 +413,6 @@ app.post("/campaigning", urlencodedParser, function (req, res) {
   let letter_body = req.body.letter_body;
   let where = req.body.where;
   let studentdetails = req.body.studentdetails;
-
   let details = {
     designation: designation,
     department: department,
