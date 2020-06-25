@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import logo from "./images/logo.png";
 import axios from "axios";
-import "./css/Form.css";
+import "../../css/styles.css";
 
 const FacultyRegister = () => {
   const [dept, setDept] = useState("CSE");
   const [isMessage, setMessage] = useState(false);
+  const [resmes, setResmes] = useState([]);
   const [contact, setContact] = useState({
     rollNo: "",
     name: "",
@@ -15,8 +16,8 @@ const FacultyRegister = () => {
   });
   const [error, setError] = useState("");
   useEffect(() => {
-    if (error !== "") {
-      setTimeout(() => setError(""), 7000);
+    if (resmes.length !== 0) {
+      setTimeout(() => setResmes([]), 7000);
     }
   });
   const handleChange = (event) => {
@@ -47,9 +48,14 @@ const FacultyRegister = () => {
       .then((res) => {
         console.log(res);
         if (res.data.hasOwnProperty("err")) {
-          setError(res.data.err);
+          let mes = Object.values(res.data.err);
+          let ss = Array.from(mes);
+          setMessage(false);
+
+          setResmes(ss);
         } else if (res.data.hasOwnProperty("message")) {
-          setError(res.data.message);
+          let mes = Object.values(res.data);
+          setResmes(mes);
           setMessage(true);
           setContact((prevState) => ({
             ...prevState,
@@ -66,81 +72,101 @@ const FacultyRegister = () => {
   //
   const deptList = ["CSE", "IT", "EEE", "ECE", "MECH", "CIVIL", "MBA"];
   return (
-    <div className="all-items">
-      <div className="rforms">
-        <form>
+    <div className="register-forms">
+      <form>
+        <div style={{ textAlign: "center" }}>
           <img
             src={logo}
             alt="logo"
             style={{ width: "150px", height: "150px" }}
           />
-          <h1 style={{ color: "white" }}>A.R.M.A Faculty Registration</h1>
-          <br />
-          <div className="justif">
-            <h4>Roll No: </h4>
-            <input
-              type="text"
-              onChange={handleChange}
-              name="rollNo"
-              className="inputboxess"
-              value={contact.rollNo}
-              placeholder="Roll Number"
-            />
+        </div>
+        <h1 style={{ color: "white", textAlign: "center" }}>
+          {" "}
+          A.R.M.A Faculty Registration
+        </h1>
+        <br />
+        <br />
+        <div className="container">
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Roll No : </h4>
+            </div>
+            <div className="col-md">
+              <input
+                type="text"
+                onChange={handleChange}
+                name="rollNo"
+                className="inputboxes"
+                value={contact.rollNo}
+                placeholder="Roll Number"
+              />
+            </div>
           </div>
-          <br />
-          <br />
-          <div className="justif">
-            <h4>Name: </h4>
-            <input
-              type="text"
-              onChange={handleChange}
-              name="name"
-              className="inputboxess"
-              value={contact.name}
-              placeholder="Name"
-            />
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Name : </h4>
+            </div>
+            <div className="col-md">
+              <input
+                type="text"
+                onChange={handleChange}
+                name="name"
+                className="inputboxes"
+                value={contact.name}
+                placeholder="Name"
+              />
+            </div>
           </div>
-          <br />
-          <br />
-          <div className="justif">
-            <h4>Department: </h4>
-            <select
-              className="selecti round"
-              name="value"
-              onChange={(e) => setDept(e.target.value)}
-            >
-              {deptList.map((depts) => (
-                <option> {depts} </option>
-              ))}
-            </select>
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Department : </h4>
+            </div>
+            <div className="col-md">
+              <select
+                className="login-dropdown round"
+                name="value"
+                onChange={(e) => setDept(e.target.value)}
+              >
+                {deptList.map((depts) => (
+                  <option> {depts} </option>
+                ))}
+              </select>
 
-            <span className="select-arrow"></span>
+              <span className="select-arrow"></span>
+            </div>
           </div>
-          <br />
-          <br />
-          <div className="justif">
-            <h4>Email: </h4>
-            <input
-              type="email"
-              onChange={handleChange}
-              name="email"
-              className="inputboxess"
-              value={contact.email}
-              placeholder="Email"
-            />
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Email : </h4>
+            </div>
+            <div className="col-md">
+              <input
+                type="email"
+                onChange={handleChange}
+                name="email"
+                className="inputboxes"
+                value={contact.email}
+                placeholder="Email"
+              />
+            </div>
           </div>
-          <br />
-          <br />
-          <div className="justif">
-            <h4>Confirm Email: </h4>
-            <input
-              type="email"
-              onChange={handleChange}
-              name="cemail"
-              className="inputboxess"
-              value={contact.cemail}
-              placeholder="Confirm Email"
-            />
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Confirm email : </h4>
+            </div>
+            <div className="col-md">
+              <input
+                type="email"
+                onChange={handleChange}
+                name="cemail"
+                className="inputboxes"
+                value={contact.cemail}
+                placeholder="Confirm Email"
+              />
+            </div>
+          </div>
+          <div className="row">
             <h5
               style={{
                 display: !isEnabled ? "inline" : "none",
@@ -152,20 +178,24 @@ const FacultyRegister = () => {
               Enter the same email as above
             </h5>
           </div>
-          <br />
-          <br />
-          <div className="justif">
-            <h4>PhoneNo: </h4>
-            <input
-              type="text"
-              onChange={handleChange}
-              className="inputboxess"
-              name="pnum"
-              value={contact.pnum}
-              placeholder="Phone Number"
-            />
+          <div className="row registration-row">
+            <div className="col-md registration-text">
+              <h4 style={{ paddingTop: "3%" }}>Phone number : </h4>
+            </div>
+            <div className="col-md">
+              <input
+                type="text"
+                onChange={handleChange}
+                className="inputboxes"
+                name="pnum"
+                value={contact.pnum}
+                placeholder="Phone Number"
+              />
+            </div>
           </div>
-          <br />
+        </div>
+
+        <div>
           <br />
           <button
             type="submit"
@@ -174,11 +204,19 @@ const FacultyRegister = () => {
           >
             Register
           </button>
-
-          <br />
-          <h4 style={{ color: isMessage ? "green" : "#ff1744" }}>{error} </h4>
-        </form>
-      </div>
+        </div>
+        <br />
+        {resmes.map((er) => (
+          <h4
+            style={{
+              color: isMessage ? "green" : "#ff1744",
+              textAlign: "center",
+            }}
+          >
+            {er} <br />
+          </h4>
+        ))}
+      </form>
     </div>
   );
 };

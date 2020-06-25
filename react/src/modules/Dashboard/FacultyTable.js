@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/table.css";
+import "../../css/styles.css";
 import axios from "axios";
 
 class FacultyTable extends React.Component {
@@ -63,7 +63,7 @@ class FacultyTable extends React.Component {
     });
     return (
       <div class="containerz">
-        <div class="container">
+        <div class="container table-container">
           <div class="table-responsive">
             <table class="table">
               <thead>

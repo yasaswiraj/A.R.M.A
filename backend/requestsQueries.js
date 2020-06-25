@@ -11,7 +11,12 @@ rec_arr is an array of roll numbers of the requested faculty
 function addRequest(forum_name,unique_id,request_data,rec_arr, callback) {
 
   //returns status of registration (true or false)
-  var client = new Client();
+  const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
   client.connect();
   forum_name = forum_name.toUpperCase();
 
@@ -81,7 +86,12 @@ function addRequest(forum_name,unique_id,request_data,rec_arr, callback) {
 // });
 function changeRequest(forum_name,request_data,status,remarks,request_id, callback) {
   //returns status of registration (true or false)
-  var client = new Client();
+  const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
   client.connect();
   forum_name = forum_name.toUpperCase();
 
@@ -109,8 +119,8 @@ function changeRequest(forum_name,request_data,status,remarks,request_id, callba
 	//faculty can update request that only they received.
 	//they can update remarks and status
  		client.query(
- 		  "update requests set remarks=$1,status=$2 where request_id=$3 AND forum_name=$4;",
- 		  [remarks,status,request_id,forum_name],
+ 		  "update requests set remarks=$1,status=$2,request_data=$3 where request_id=$4 AND forum_name=$5;",
+ 		  [remarks,status,request_data,request_id,forum_name],
  		  (err, res) => {
  		    if (err) {
  		      client.end();
@@ -125,7 +135,12 @@ function changeRequest(forum_name,request_data,status,remarks,request_id, callba
 }
 function deleteRequest(request_id, forum_name, callback) {
   //returns status of registration (true or false)
-  var client = new Client();
+  const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
   client.connect();
   client.query(
     "DELETE FROM requests WHERE request_id = $1 AND forum_name=$2;",

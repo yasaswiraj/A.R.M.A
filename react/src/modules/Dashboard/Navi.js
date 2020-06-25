@@ -1,14 +1,13 @@
 import React from "react";
-import "./css/nav.css";
+import "../../css/styles.css";
 import { Nav, Navbar } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const Navi = () => {
   const history = useHistory();
-
+  const user = JSON.parse(localStorage.getItem("user"));
   const handleLogout = () => {
-    let user = JSON.parse(localStorage.getItem("user"));
     if (user !== null) {
       let accessToken = user.accessToken;
       console.log(user.userName);
@@ -23,7 +22,7 @@ const Navi = () => {
         .then((response) => {
           console.log(response);
           localStorage.clear();
-          history.push("/");
+          history.push("/login");
         })
         .catch((err) => {
           console.log(err);
@@ -40,7 +39,12 @@ const Navi = () => {
       bg="dark"
       variant="dark"
     >
-      <Navbar.Brand style={{color:"#C60CD5",textShadow: "0.5px 0.5px 2px #C60CD5"}} href="#home">ARMA</Navbar.Brand>
+      <Navbar.Brand
+        style={{ color: "#C60CD5", textShadow: "0.5px 0.5px 2px #C60CD5" }}
+        href="/"
+      >
+        ARMA
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
@@ -54,6 +58,7 @@ const Navi = () => {
               <i class="fas fa-user"></i> Profile
             </Nav.Link>
           </Nav>
+
           <Nav.Link onClick={handleLogout}>
             <i class="fas fa-sign-out-alt"></i>Log out
           </Nav.Link>

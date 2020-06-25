@@ -1,25 +1,16 @@
 {
-    "designation": "",
-    "department": "",
-    "subject": "",
-    "date": "",
-    "respects": "",
-    "team_name": "",
-    "event_name": "",
-    "fromdate": "",
-    "todate": "",
-    "start_hour": "",
-    "start_min": "",
-    "start_meridian": "",
-    "end_hour": "",
-    "end_min": "",
-    "end_meridian": "",
-    "letter_body": "",
-    "where": "",
-    "studentdetails": [
-      {
-        "Name": "",
-        "Roll": ""
-      }
-    ]
-  }
+  "department": "Department of Computer Science and Engineering",
+  "subject": "Permission for attending a wedding",
+  "date": "2020-06-18",
+  "respects": "Sir",
+  "your_name": "M Yasaswi Raj",
+  "year": "Second",
+  "section": "C",
+  "roll_no": "18P61A05C2",
+  "reason": "attenDinG a WeDdIng",
+  "start_date": "2020-06-19",
+  "end_date": "2020-06-20",
+  "hod_name": "Sridhar",
+  "faculty_name": "kiran",
+  "faculty": "Principal"
+}

@@ -45,108 +45,133 @@ const fs = require("fs");
 	changeFacultyEmail
 */
 
-
-async function getFaculty(req)
-{
-	return new Promise((resolve, reject)=>{
-		var res = {};
-		users.fetchAccessToken(req)
-		.then(token=>{
-			return users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN);
-		})
-		.then(username=>{
-			var client = new Client();
-			client.connect();
-			client.query("SELECT faculty_name FROM faculty;")
-			.then(data=>{
-				var faculty = [];
-				data.rows.forEach(row=>{faculty.push(row.faculty_name)})
-				res.status =200;
-				res.response = {all_faculty: faculty};
-				client.end();
-				return resolve(res);
-			})
-			.catch(error=>{
-				res.status = 500;
-				res.response = {err: "Internal Database error"}
-				client.end();
-				return resolve(res);
-			})
-		})
-		.catch(error=>{
-			res.status = 400;
-			res.response = {err: error};
-			return resolve(res);
-		})
-	});
+async function getFaculty(req) {
+  return new Promise((resolve, reject) => {
+    var res = {};
+    users
+      .fetchAccessToken(req)
+      .then((token) => {
+        return users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN);
+      })
+      .then((username) => {
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+        client.connect();
+        client
+          .query("SELECT faculty_name FROM faculty;")
+          .then((data) => {
+            var faculty = [];
+            data.rows.forEach((row) => {
+              faculty.push(row.faculty_name);
+            });
+            res.status = 200;
+            res.response = { all_faculty: faculty };
+            client.end();
+            return resolve(res);
+          })
+          .catch((error) => {
+            res.status = 500;
+            res.response = { err: "Internal Database error" };
+            client.end();
+            return resolve(res);
+          });
+      })
+      .catch((error) => {
+        res.status = 400;
+        res.response = { err: error };
+        return resolve(res);
+      });
+  });
 }
 
-async function getFacilities(req)
-{
-	return new Promise((resolve, reject)=>{
-		var res = {};
-		users.fetchAccessToken(req)
-		.then(token=>{
-			return users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN);
-		})
-		.then(username=>{
-			var client = new Client();
-			client.connect();
-			client.query("SELECT facility_name FROM facilities;")
-			.then(data=>{
-				var facilities = [];
-				data.rows.forEach(row=>{facilities.push(row.facility_name)})
-				res.status =200;
-				res.response = {all_facilities: facilities};
-				client.end();
-				return resolve(res);
-			})
-			.catch(error=>{
-				res.status = 500;
-				res.response = {err: "Internal Database error"}
-				client.end();
-				return resolve(res);
-			})
-		})
-		.catch(error=>{
-			res.status = 400;
-			res.response = {err: error};
-			return resolve(res);
-		})
-	});
+async function getFacilities(req) {
+  return new Promise((resolve, reject) => {
+    var res = {};
+    users
+      .fetchAccessToken(req)
+      .then((token) => {
+        return users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN);
+      })
+      .then((username) => {
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+        client.connect();
+        client
+          .query("SELECT facility_name FROM facilities;")
+          .then((data) => {
+            var facilities = [];
+            data.rows.forEach((row) => {
+              facilities.push(row.facility_name);
+            });
+            res.status = 200;
+            res.response = { all_facilities: facilities };
+            client.end();
+            return resolve(res);
+          })
+          .catch((error) => {
+            res.status = 500;
+            res.response = { err: "Internal Database error" };
+            client.end();
+            return resolve(res);
+          });
+      })
+      .catch((error) => {
+        res.status = 400;
+        res.response = { err: error };
+        return resolve(res);
+      });
+  });
 }
 
-async function forgotPassword(req)
-{
-	// non-authenticated endpoint.
-	//expects userType, username, reg_email.
+async function forgotPassword(req) {
+  // non-authenticated endpoint.
+  //expects userType, username, reg_email.
 
-	return new Promise((resolve, reject)=>{
-		var res = {};
-		if(!req.body.userType || !req.body.username || !req.body.reg_email)
-		{
-			res.status = 400;
-			res.response = {err:"Invalid number of arguments!"};
-			return resolve(res);
-		}
-		users.forgotPassword(req.body.userType, req.body.username.toUpperCase(), req.body.reg_email)
-		.then(state=>{
-			res.status = 200;
-			res.response = {message: "mail sent successfully to registered email."}
-			return resolve(res);
-		})
-		.catch(error=>{
-			res.status = 400;
-			res.response = {err: error};
-			return resolve(res);
-		})
-	});
+  return new Promise((resolve, reject) => {
+    var res = {};
+    if (!req.body.userType || !req.body.username || !req.body.reg_email) {
+      res.status = 400;
+      res.response = { err: "Invalid number of arguments!" };
+      return resolve(res);
+    }
+    users
+      .forgotPassword(
+        req.body.userType,
+        req.body.username.toUpperCase(),
+        req.body.reg_email
+      )
+      .then((state) => {
+        res.status = 200;
+        res.response = {
+          message: "mail sent successfully to registered email.",
+        };
+        return resolve(res);
+      })
+      .catch((error) => {
+        res.status = 400;
+        res.response = { err: error };
+        return resolve(res);
+      });
+  });
 }
 
 async function getRegisteredForums(req) {
   return new Promise((resolve, reject) => {
     var res = {};
-    var client = new Client();
+    const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
     client.connect();
     client
       .query("SELECT actual_name,forum_name FROM forums;")
@@ -177,7 +202,12 @@ async function getForumDetails(req) {
         users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN)
       )
       .then((username) => {
-        var client = new Client();
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
         client.connect();
         client
           .query(
@@ -377,7 +407,12 @@ async function facultyDashboard(req) {
       })
       .then((faculty_roll) => {
         faculty_roll = faculty_roll.toUpperCase();
-        var client = new Client();
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
         client.connect();
         client
           .query(
@@ -433,7 +468,12 @@ async function makeNewRequest(req) {
           throw "Invalid recipients!";
 
         for (let i = 0; i < req.body.recipients.length; i++) {
-          var client = new Client();
+          const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
           client.connect();
           client
             .query("select faculty_roll from faculty where faculty_name=$1", [
@@ -571,7 +611,12 @@ async function updateRequest(req) {
           //user is faculty
           //update status and remarks
           //check if request_id is their own.
-          var client = new Client();
+          const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
           client.connect();
           client
             .query(
@@ -644,7 +689,12 @@ async function approveRequest(req) {
             data[username].userType == "FACULTY"
           ) {
             //only faculty can approve or reject.
-            var client = new Client();
+            const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
             client.connect();
             client
               .query(
@@ -696,7 +746,12 @@ async function forumsDashboard(req) {
       })
       .then((forum_name) => {
         forum_name = forum_name.toUpperCase();
-        var client = new Client();
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
         client.connect();
         client
           .query(
@@ -742,7 +797,12 @@ async function fetchRequest(req) {
           );
         })
         .then((username) => {
-          var client = new Client();
+          const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
           client.connect();
           client
             .query("select * from requests where request_id=$1", [
@@ -834,12 +894,12 @@ async function registerForum(req) {
     //set status, set response object
     const data = req.body.registrationData;
     if (!data) {
-      res.status = 400;
-      res.response = { err: "No registrationData field!" };
+      res.status = 200;
+      res.response = { err: { errmessage: "No registrationData field!" } };
       return resolve(res);
     } else if (!data.username || !data.phone || !data.email) {
-      res.status = 400;
-      res.response = { err: "Invalid number of arguments" };
+      res.status = 200;
+      res.response = { err: { errmessage: "Invalid number of arguments" } };
       return resolve(res);
     } else {
       dataValidator
@@ -865,9 +925,11 @@ async function registerForum(req) {
                 //nothing. Mail is sent to forum.
               })
               .catch((error) => {
-                res.status = 400;
+                res.status = 200;
                 res.response = {
-                  err: "error sending mail to user" + data.email,
+                  err: {
+                    errmessage: "error sending mail to user" + data.email,
+                  },
                 };
                 console.log("Error sending mail to user :" + data.email, error);
                 return resolve(res);
@@ -883,8 +945,10 @@ async function registerForum(req) {
                 //nothing. We get the mail.
               })
               .catch((error) => {
-                res.status(500);
-                res.reponse = { err: "Server couldnt register request!" };
+                res.status=500;
+                res.reponse = {
+                  err: { errmessage: "Server couldnt register request!" },
+                };
                 console.log("Error sending mail to self", error);
               })
               .then(() => {
@@ -910,7 +974,7 @@ async function registerForum(req) {
           }
         })
         .catch((error) => {
-          res.status = 400;
+          res.status = 200;
           res.response = { err: error };
           return resolve(res);
         });
@@ -923,8 +987,8 @@ async function registerFaculty(req) {
     //set status, set response object
     const data = req.body.registrationData;
     if (!data) {
-      res.status = 400;
-      res.response = { err: "No registrationData field!" };
+      res.status = 200;
+      res.response = { err: { errmessage: "No registrationData field!" } };
       return resolve(res);
     } else if (
       !data.faculty_name ||
@@ -933,8 +997,8 @@ async function registerFaculty(req) {
       !data.faculty_dept ||
       !data.faculty_roll
     ) {
-      res.status = 400;
-      res.response = { err: "Invalid number of arguments!" };
+      res.status = 200;
+      res.response = { err: { errmessage: "Invalid number of arguments" } };
       return resolve(res);
     } else {
       dataValidator
@@ -960,8 +1024,12 @@ async function registerFaculty(req) {
                 //nothing. Mail is sent to faculty.
               })
               .catch((error) => {
-                res.status = 400;
-                res.response = { err: "Error sending mail to user!" };
+                res.status = 200;
+                res.response = {
+                  err: {
+                    errmessage: "error sending mail to user" + data.email,
+                  },
+                };
 
                 console.log(
                   "Error sending mail to user :" + data.faculty_email,
@@ -981,8 +1049,8 @@ async function registerFaculty(req) {
               })
               .catch((error) => {
                 res.status = 500;
-                res.response = {
-                  err: "Error registering user!",
+                res.reponse = {
+                  err: { errmessage: "Server couldnt register request!" },
                 };
                 console.log("Error sending mail to self", error);
                 return resolve(res);
@@ -1012,7 +1080,7 @@ async function registerFaculty(req) {
           }
         })
         .catch((error) => {
-          res.status = 400;
+          res.status = 200;
           res.response = { err: error };
           return resolve(res);
         });
@@ -1273,7 +1341,12 @@ async function getFacultyDetails(req) {
         return users.authenticateToken(token, process.env.SECRET_ACCESS_TOKEN);
       })
       .then((username) => {
-        var client = new Client();
+        const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
         client.connect();
 
         client
@@ -1303,31 +1376,31 @@ async function getFacultyDetails(req) {
 }
 
 module.exports = {
-	getForumDetails,
-	loginForums,
-	loginFaculty,
-	logout,
-	forgotPassword,
-	facultyDashboard,
-	makeNewRequest,
-	deleteRequest,
-	updateRequest,
-	approveRequest,
-	forumsDashboard,
-	fetchRequest,
-	checkForumRegistrationStatus,
-	checkFacultyRegistrationStatus,
-	registerForum,
-	registerFaculty,
-	getUserType,
-	changeForumUsername,
-	changeFacultyUsername,
-	changeForumPassword,
-	changeFacultyPassword,
-	changeForumEmail,
-	changeFacultyEmail,
-	getFacultyDetails,
-	getRegisteredForums,
-	getFaculty,
-	getFacilities
+  getForumDetails,
+  loginForums,
+  loginFaculty,
+  logout,
+  forgotPassword,
+  facultyDashboard,
+  makeNewRequest,
+  deleteRequest,
+  updateRequest,
+  approveRequest,
+  forumsDashboard,
+  fetchRequest,
+  checkForumRegistrationStatus,
+  checkFacultyRegistrationStatus,
+  registerForum,
+  registerFaculty,
+  getUserType,
+  changeForumUsername,
+  changeFacultyUsername,
+  changeForumPassword,
+  changeFacultyPassword,
+  changeForumEmail,
+  changeFacultyEmail,
+  getFacultyDetails,
+  getRegisteredForums,
+  getFaculty,
+  getFacilities,
 };
