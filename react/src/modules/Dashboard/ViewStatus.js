@@ -20,7 +20,7 @@ const ViewStatus = (props) => {
   const [Remarks, setRemarks] = useState("");
   const [Description, setDescription] = useState("");
   const [Facility, setFacility] = useState([
-    { facility: "No Facility Yet", check: true },
+    { facility: "No Facility Yet", check: true }, 
   ]);
   const [Text, setText] = useState("Hrlrgdghisku");
   const [PartTable, setTable] = useState(true);
@@ -46,12 +46,12 @@ const ViewStatus = (props) => {
         setSubject(data.request_data.subject);
         setReq_data(data.request_data);
         setDescription(data.request_data.description);
-        setPeople(data.request_data.selected_participants);
-        setFacility(data.request_data.selected_facilities);
+        setPeople(data.request_data.participants);
+        setFacility(data.request_data.facilities);
         setStatus(data.status);
         setRemarks(data.remarks);
         console.log(data);
-      })
+      })  
       .catch((err) => {
         console.log(err);
       });
@@ -91,7 +91,7 @@ const ViewStatus = (props) => {
   const list = fliteredParticipants.map((item) => {
     var temp=item.check?"td":"em";
     return(
-    <tr className={item.check?"tr":"em"}>
+    <tr className={item.check?"tr":"em"} style={{background:item.check?"#2ea44f	":"#FF6347"}}>
       <td  className={temp}>{count++}</td>
       <td className={temp}>{item.name}</td>
       <td className={temp}>{item.roll}</td>
@@ -101,7 +101,7 @@ const ViewStatus = (props) => {
   const list1 = Facility.map((item) => {
     var temp=item.check?"td":"em"
     return(
-    <tr className={item.check?"tr":"em"}>
+    <tr className={item.check?"tr":"em"} style={{background:item.check?"#2ea44f	":"#FF6347"}}>
       <td className={temp}>{f_count++}</td>
       <td className={temp}>{item.facility}</td>
     </tr>

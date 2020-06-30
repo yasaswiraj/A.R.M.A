@@ -82,7 +82,7 @@ const ProfileModal = (props) => {
               type="submit"
               className="submit-button"
               disabled = {!isEnabled}
-              onClick={() => {
+              onClick={(e) => {
                 let user = JSON.parse(localStorage.getItem("user"));
                 if (user !== null) {
                   let userName = user.userName;
@@ -110,6 +110,7 @@ const ProfileModal = (props) => {
                       console.log(err);
                     });
                 }
+                e.preventDefault();
               }}
             >
               Save Changes
